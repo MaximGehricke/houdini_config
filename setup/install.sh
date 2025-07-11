@@ -1,2 +1,2 @@
 #!/bin/bash
-python houEnv.py
+python3 houEnv.py

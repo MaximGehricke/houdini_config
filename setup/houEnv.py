@@ -4,33 +4,6 @@ import time, os, sys, re
 
 locations = ["C:/Users/Maxim/Documents/","/net/homes/mgehrick/"]
 
-boilerplate = '''
-
-# ===============================================================
-# My Custom Houdini Environment
-# ===============================================================
-
-# 1. Define the root of our Git repository. 
-# windows path: HOUDINI_REPO = "Z:/houdini_config/"
-# linux path: HOUDINI_REPO = "/net/homes/mgehrick/houdini_config"
-
-# 2. Add our repo to Houdini's search path.
-#    The '&' tells Houdini to also include the default paths.
-HOUDINI_PATH = "$HOUDINI_REPO;&"
-
-# 3. Point to specific directories for better organization and performance.
-HOUDINI_TOOLBAR_PATH = "$HOUDINI_REPO/toolbar;&"
-HOUDINI_OTLSCAN_PATH = "$HOUDINI_REPO/hda;&"
-
-# 4. Add our python scripts to the PYTHONPATH so Houdini can find them.
-PYTHONPATH = "$HOUDINI_REPO/scripts/python;&"
-
-# 5. Add our VEX includes to the VEX path.
-HOUDINI_VEX_PATH = "$HOUDINI_REPO/scripts/vex;&"
-
-'''
-
-
 def winOrLinux():
 
     if sys.platform.startswith('win'):
@@ -83,12 +56,39 @@ def findHoudiniEnv(loc):
     return houdini_folders
 
 
-def updateEnv(folders, boilerplate):
+def readBoilerplate():
+    # Get the dir of current script and return boilerplate.txt in same dir
+    bpfile = os.path.dirname(os.path.abspath(__file__))+"/boilerplate.txt"
+    try:
+        with open(bpfile, 'r') as f:
+            print("reading boilerplate.txt ...")
+            return str(f.read())
+    except IOError as e:
+        print(f"Error: Could not read boilerplate file: '{bpfile}'. Reason: {e}")
+
+
+
+
+
+
+def updateEnv(folders, bp):
     for folder in folders:
         folder.replace("houdini.env","")
         env = folder + "/houdini.env"
         env.replace("//","/").replace("\\","/")
-        print("writing to ", env)
+        print("appending to ", env)
+        try:
+            with open(env, 'r') as f:
+                if bp in str(f.read()):
+                    print(f"already installed in '{env}'")
+                    continue
+                with open(env, 'a') as f:
+                    f.write(bp)
+            
+            print(f"Successfully appended to '{env}'")
+
+        except IOError as e:
+            print(f"Error: Could not write to file '{env}'. Reason: {e}")
 
 
 def main():
@@ -98,7 +98,7 @@ def main():
     print("\n")
     time.sleep(0.5)    
     envPaths =  findHoudiniEnv(locations)
-    print("folder: ", envPaths)
+    # print("folder: ", envPaths)
     time.sleep(2)
     print("\n")
     time.sleep(0.5)
@@ -106,11 +106,16 @@ def main():
     time.sleep(0.5)
     print("\n")
     if system == "windows":
-        bp = boilerplate.replace("# windows path: ","")
+        bp = readBoilerplate().replace("# windows path: ","")
     else:
-        bp = boilerplate.replace("# linux path: ","")
-    # print(bp)
-    time.sleep(2)
+        bp = readBoilerplate().replace("# linux path: ","")
+    time.sleep(0.5)
+    print("\n")
+    time.sleep(0.5)
+    print("\n")
+    print("\n")
+    time.sleep(0.5)
+    print("\n")
     updateEnv(envPaths,bp)
     
     time.sleep(0.2)

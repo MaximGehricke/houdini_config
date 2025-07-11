@@ -1,0 +1,52 @@
+#houEnv
+#sets up the Houdini Environment
+
+boilerplate = '''
+# ===============================================================
+# My Custom Houdini Environment
+# ===============================================================
+
+# 1. Define the root of our Git repository. 
+# windows path: HOUDINI_REPO = "Z:/houdini_config/"
+# linux path: HOUDINI_REPO = "/net/homes/mgehrick/houdini_config"
+
+# 2. Add our repo to Houdini's search path.
+#    The '&' tells Houdini to also include the default paths.
+HOUDINI_PATH = "$HOUDINI_REPO;&"
+
+# 3. Point to specific directories for better organization and performance.
+HOUDINI_TOOLBAR_PATH = "$HOUDINI_REPO/toolbar;&"
+HOUDINI_OTLSCAN_PATH = "$HOUDINI_REPO/hda;&"
+
+# 4. Add our python scripts to the PYTHONPATH so Houdini can find them.
+PYTHONPATH = "$HOUDINI_REPO/scripts/python;&"
+
+# 5. Add our VEX includes to the VEX path.
+HOUDINI_VEX_PATH = "$HOUDINI_REPO/scripts/vex;&"
+
+'''
+
+
+def winOrLinux():
+    import sys
+    if sys.platform.startswith('win'):
+        return "windows"  
+    elif sys.platform.startswith('linux'):
+        return "linux"
+    else:
+        return "other"
+    
+
+def main():
+    os = winOrLinux()
+    print(os)
+    if os == "windows":
+        output = boilerplate.replace("# windows path: ","")
+    else:
+        output = boilerplate.replace("# linux path: ","")
+    print(output)
+
+
+
+if __name__ == "__main__":
+    main()

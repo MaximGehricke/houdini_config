@@ -3,7 +3,7 @@
 #icon = SOP_visibility
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     times = 0
     parents = hou.selectedNodes()
     for parent in parents:

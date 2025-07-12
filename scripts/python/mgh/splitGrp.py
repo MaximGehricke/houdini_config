@@ -6,7 +6,7 @@
 import os
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     # Ensure a node is selected
     if len(hou.selectedNodes()) == 0:
         hou.ui.displayMessage("No Nodes Selected")

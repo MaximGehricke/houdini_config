@@ -4,7 +4,7 @@
 
 import hou
 
-def main(kwargs, search_paths = ['']):
+def main(search_paths = [''],**kwargs):
     # search_path : List of specific paths at which to search for "DEBUG" nodes
     curPath = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor).pwd().path()
     search_paths.append(curPath)

@@ -6,7 +6,7 @@
 
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     nodes = hou.selectedNodes()
     parmsToAffect = ["cache_path","cachepath","campath","cmp_camera","source","shop_materialpath","shop_materialpath1","shop_materialpath2","shop_materialpath3","shop_materialpath4","objpath1","objpath2","objpath3","objpath4","objpath5","objpath6","objpath7","objpath8","objpath9","objpath10","soppath","sop_path","soppath","bindgeoinput1","bindgeoinput2","bindgeoinput3","bindgeoinput4"]
 
@@ -14,7 +14,7 @@ def main(kwargs):
         for parm in node.parms():
             for name in parmsToAffect:
                 if parm.name()==name:
-                    print(parm.name())
+                    #print(parm.name())
                     try:
                         #for all matching parms:
                         #if whole path except last is equal - replace whole thing with ../

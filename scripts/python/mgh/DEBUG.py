@@ -4,7 +4,7 @@
 
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     nodes = hou.selectedNodes()
 
     if nodes:
@@ -26,7 +26,8 @@ def main(kwargs):
     else:
         pane = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
         if pane is None:
-        hou.ui.displayMessage('Cannot create node: cannot find any network pane')
+            hou.ui.displayMessage('Cannot create node: cannot find any network pane')
+            exit()
         
         node = pane.currentNode()
         node.setName("DEBUG___"+str(node),unique_name=True)

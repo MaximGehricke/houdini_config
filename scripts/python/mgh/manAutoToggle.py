@@ -5,7 +5,7 @@
 
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     mode = hou.updateModeSetting().name()
     if mode == 'AutoUpdate':
         hou.setUpdateMode(hou.updateMode.Manual)

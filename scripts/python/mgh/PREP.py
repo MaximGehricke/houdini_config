@@ -4,7 +4,7 @@
 
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     #find lowest selected node:
     selectedNodes = hou.selectedNodes()
 

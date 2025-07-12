@@ -7,7 +7,7 @@ import toolutils
 import htoa
 
 
-def main(kwargs):
+def main(**kwargs):
     #isolate selected node or restore previous
     networkpath = next(tab.pwd().path() for tab in hou.ui.currentPaneTabs() if isinstance(tab, hou.NetworkEditor) and tab.isCurrentTab())
     # network = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)

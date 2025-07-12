@@ -7,7 +7,7 @@ import sys
 import toolutils
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     bg = None
 
     try:

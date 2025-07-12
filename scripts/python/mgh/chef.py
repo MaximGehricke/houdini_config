@@ -4,7 +4,7 @@
 
 import hou
 
-def main(kwargs):
+def main(**kwargs):
     frame = (int(hou.frame()),int(hou.frame()))
     selected_nodes = hou.selectedNodes()
 

@@ -14,11 +14,15 @@
 				},
 				{
 					"action":"h.tool:ManAutoToggle",
+					"label":"",
+					"description":"",
 					"keys":["F5"
 					]
 				},
 				{
 					"action":"h.tool:changeBG",
+					"label":"",
+					"description":"",
 					"keys":["Alt+B"
 					]
 				}
@@ -58,22 +62,38 @@
 			"symbol":"h.pane.wsheet",
 			"bindings":[
 				{
+					"action":"h.pane.wsheet.bypass_mode",
+					"keys":["B"
+					]
+				},
+				{
+					"action":"h.pane.wsheet.opparms",
+					"keys":["P","Q"
+					]
+				},
+				{
 					"action":"h.pane.wsheet.overview",
 					"keys":[
 					]
 				},
 				{
 					"action":"h.pane.wsheet.tool:OUT",
+					"label":"",
+					"description":"",
 					"keys":["O"
 					]
 				},
 				{
 					"action":"h.pane.wsheet.tool:makeRelative",
+					"label":"",
+					"description":"",
 					"keys":["Alt+R"
 					]
 				},
 				{
 					"action":"h.pane.wsheet.tool:pasteMerge",
+					"label":"",
+					"description":"",
 					"keys":["Alt+V"
 					]
 				}

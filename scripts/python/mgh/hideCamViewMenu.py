@@ -28,9 +28,13 @@ def append_toggle_hide(node, folder_name, toggle_name, toggle_label, toggle_defa
         ptg.appendToFolder(folder, p)
         node.setParmTemplateGroup(ptg)
     else:
-        node.parm(toggle_name).set(False)
+        state = node.parm(toggle_name).eval()
+        if state:
+            node.parm(toggle_name).set(False)
+        else:
+            node.parm(toggle_name).set(True)
 
-def main(kwargs):
+def main(**kwargs):
     for cam in cameras_from_selection():
         append_toggle_hide(cam, 'Render', 'soho_viewport_menu', 'Show In Viewport Menu', False)
         append_toggle_hide(cam, 'Render', 'soho_renderview_menu', 'Show In Render View Menu', False)

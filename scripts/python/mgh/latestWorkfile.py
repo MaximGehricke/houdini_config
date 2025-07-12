@@ -16,7 +16,7 @@ filename = """/path/to/file/filename"""
 ##########################################################
 
 
-def main(kwargs):
+def main(**kwargs):
     #choose workfile:
     choice = hou.ui.selectFromList(options,exclusive=True)
     if not choice:

@@ -4,15 +4,23 @@
 
 import hou
 
-frame = (int(hou.frame()),int(hou.frame()))
-selected_nodes = hou.selectedNodes()
+def main():
+    frame = (int(hou.frame()),int(hou.frame()))
+    selected_nodes = hou.selectedNodes()
 
 
-for node in selected_nodes:
-    print(node)
-    node.cook(force=True,frame_range=(frame))
-    for child in node.children():
-        child.cook(force=True,frame_range=(frame))
-        if child.type().category() == hou.objNodeTypeCategory():
-            for childchild in child.children(): 
-                childchild.cook(force=True,frame_range=(frame))
+    for node in selected_nodes:
+        print(node)
+        node.cook(force=True,frame_range=(frame))
+        for child in node.children():
+            child.cook(force=True,frame_range=(frame))
+            if child.type().category() == hou.objNodeTypeCategory():
+                for childchild in child.children(): 
+                    childchild.cook(force=True,frame_range=(frame))
+
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

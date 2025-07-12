@@ -30,10 +30,14 @@ def append_toggle_hide(node, folder_name, toggle_name, toggle_label, toggle_defa
     else:
         node.parm(toggle_name).set(False)
 
-def hide_cam_view_menu_on_selection():
-
+def main():
     for cam in cameras_from_selection():
         append_toggle_hide(cam, 'Render', 'soho_viewport_menu', 'Show In Viewport Menu', False)
         append_toggle_hide(cam, 'Render', 'soho_renderview_menu', 'Show In Render View Menu', False)
 
-hide_cam_view_menu_on_selection()
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

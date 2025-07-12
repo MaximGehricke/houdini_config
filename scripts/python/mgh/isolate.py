@@ -7,7 +7,8 @@ import toolutils
 import htoa
 
 
-def isolateSelOrRestore():
+def main():
+    #isolate selected node or restore previous
     networkpath = next(tab.pwd().path() for tab in hou.ui.currentPaneTabs() if isinstance(tab, hou.NetworkEditor) and tab.isCurrentTab())
     # network = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
     # networkpath = network.pwd().path()
@@ -30,5 +31,9 @@ def isolateSelOrRestore():
             sel = hou.selectedNodes()[0]
             mat_out.setInput(0,sel)
 
-isolateSelOrRestore()
-            
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

@@ -173,4 +173,10 @@ def main():
     #customize visualizer based on attrib info
     customizeViz(viz, info)
     
-main()
+
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

@@ -83,9 +83,18 @@ def createWhiteMaterial():
         else:
             vopnet = hou.node("/shop").createNode("v_constant","white")
 
+def main():
+    cam = getCurCam()
+    font = createFont()
+    placeFont(font,cam)
+    createWhiteMaterial()
+    #hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor).setCurrentNode(font)
 
-cam = getCurCam()
-font = createFont()
-placeFont(font,cam)
-createWhiteMaterial()
-#hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor).setCurrentNode(font)
+
+
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

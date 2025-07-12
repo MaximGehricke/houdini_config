@@ -192,4 +192,9 @@ def main():
     wrangle.setRenderFlag(1)
     return wrangle
 
-main()
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

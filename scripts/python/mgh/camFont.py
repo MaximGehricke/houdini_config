@@ -83,7 +83,7 @@ def createWhiteMaterial():
         else:
             vopnet = hou.node("/shop").createNode("v_constant","white")
 
-def main():
+def main(kwargs):
     cam = getCurCam()
     font = createFont()
     placeFont(font,cam)

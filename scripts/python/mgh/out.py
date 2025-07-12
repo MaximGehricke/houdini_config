@@ -4,7 +4,7 @@
 
 import hou
 
-def main():
+def main(kwargs):
     network = hou.ui.curDesktop().paneTabUnderCursor()
     networkpath = network.pwd().path()
     pos = network.cursorPosition()

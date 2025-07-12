@@ -152,7 +152,7 @@ def customizeViz(viz, info):
     viz.setIsActive(1,viewport)
     return
         
-def main():
+def main(kwargs):
         
     #get user input
     input = getUserInput()

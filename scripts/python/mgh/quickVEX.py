@@ -69,7 +69,7 @@ def connectNode(node):
    
 
    
-def main():
+def main(kwargs):
 
     ##########################################################
     #ADD ALL THE QUICK VEX SCRIPTS HERE:

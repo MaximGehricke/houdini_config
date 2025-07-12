@@ -4,7 +4,7 @@
 
 import hou
 
-def main():
+def main(kwargs):
     #find lowest selected node:
     selectedNodes = hou.selectedNodes()
 
@@ -36,20 +36,23 @@ def main():
     conv = hou.node(path).createNode('convert')
     conv.setPosition(pos-offset-offset)
     conv.setColor(color)
-    scale = hou.node(path).createNode('xform')
-    scale.setPosition(pos-offset-offset-offset)
-    scale.setColor(color)
-
-    #name hou_scale
-    scale.setName("hou_scale",1)
 
     #connect nodes
     unpack.setInput(0,lastNode)
     conv.setInput(0,unpack)
-    scale.setInput(0,conv)
 
     unpack.parm("transfer_attributes").set("path")
-    scale.parm("scale").set("0.1")
+
+    #dont scale x0.1 if ctrl clicked 
+    if not kwargs['ctrlclick']:
+        scale = hou.node(path).createNode('xform')
+        scale.setPosition(pos-offset-offset-offset)
+        scale.setColor(color)
+        scale.setName("hou_scale",1)
+        scale.setInput(0,conv)    
+        scale.parm("scale").set("0.1")
+
+
 
 
 if __name__ == "__main__":

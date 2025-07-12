@@ -1,8 +1,9 @@
 #setVis
 #sets -Use Visibility- to 0 on the alembics inside selected ObjNodes
 #icon = SOP_visibility
+import hou
 
-def main():
+def main(kwargs):
     times = 0
     parents = hou.selectedNodes()
     for parent in parents:

@@ -4,7 +4,7 @@
 
 import hou
 
-def main():
+def main(kwargs):
     network = hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor)
     networkpath = network.pwd().path()
     print(network,networkpath)

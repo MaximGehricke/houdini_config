@@ -6,7 +6,7 @@
 
 import hou
 
-def main():
+def main(kwargs):
     network = hou.ui.curDesktop().paneTabUnderCursor()
     networkpath = network.pwd().path()
     pos = network.cursorPosition()
@@ -35,7 +35,8 @@ def main():
                         merge.setSelected(True,False)
                     n = n + 1
             except:
-                print("not a sop context")
+                pass
+                # print("not a sop context")
             
             #paste a fetch if we're in a rop context - this could be more elegant
             try:
@@ -58,7 +59,8 @@ def main():
                         merge.setSelected(True,False)
                     n = n + 1
             except:
-                print("not a rop context")
+                pass
+                # print("not a rop context")
 
 
 if __name__ == "__main__":

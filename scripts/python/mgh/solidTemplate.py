@@ -5,7 +5,7 @@
 
 import hou
 
-def main():
+def main(kwargs):
     # Get a reference to the geometry viewer
     pane = hou.ui.curDesktop().paneTabOfType(hou.paneTabType.SceneViewer)
     # Get the display settings

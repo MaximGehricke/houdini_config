@@ -4,7 +4,7 @@
 
 import hou
 
-def main():
+def main(kwargs):
     nodes = hou.selectedNodes()
 
     if nodes:

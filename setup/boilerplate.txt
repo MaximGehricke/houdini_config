@@ -19,3 +19,6 @@ PYTHONPATH = "$HOUDINI_REPO/scripts/python;&"
 
 # 5. Add our VEX includes to the VEX path.
 HOUDINI_VEX_PATH = "$HOUDINI_REPO/scripts/vex;&"
+
+# 6. Add hotkeys
+HOUDINI_KEYBOARD_FILE = "$HOUDINI_REPO/hotkeys/mgh_hotkeys.txt"

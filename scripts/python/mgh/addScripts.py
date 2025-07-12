@@ -5,7 +5,7 @@
 import hou
 import os
 
-def main(legacy = 0):
+def main(kwargs, legacy = 0):
     #set to 1 for legacy mode - copying full script into Houdini preferences
     
     # Get the location of this script
@@ -45,7 +45,7 @@ def main(legacy = 0):
             code += "import importlib\n"
             code += "import "+module+"."+script_file.replace(".py","")+"\n"
             code += "importlib.reload("+module+"."+script_file.replace(".py","")+")\n"
-            code += module+"."+script_file.replace(".py","")+".main()"
+            code += module+"."+script_file.replace(".py","")+".main(kwargs)"
             
 
             if legacy==1:

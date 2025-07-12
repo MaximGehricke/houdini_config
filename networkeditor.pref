@@ -1,0 +1,5 @@
+networkeditor.badgenotcompilable := "normal";
+networkeditor.shakesensitivity := 0.400000;
+networkeditor.showstackedlook := 0;
+networkeditor.showvopinoutlabels := 1;
+networkeditor.wirefadefactor := 0.000000;

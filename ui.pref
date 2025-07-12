@@ -1,0 +1,3 @@
+general.ui.icon_size := "Compact";
+general.ui.scale := 1.15;
+general.uiplaybar.menu := 1;

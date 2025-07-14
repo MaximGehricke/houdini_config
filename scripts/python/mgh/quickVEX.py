@@ -39,6 +39,7 @@ def wrangleCreate(networkEditor):
     #use selected wrangle or create new one:
     newWrangle = 0
     nodes = hou.selectedNodes()
+    wrangle = None
     if nodes:
         for node in nodes:
             if "attribwrangle" in str(node.type()):

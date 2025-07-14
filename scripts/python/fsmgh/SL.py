@@ -20,3 +20,9 @@ def main():
           fp = desktop.createFloatingPane(hou.paneTabType.Parm)
           fp.setCurrentNode(node)
 
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()

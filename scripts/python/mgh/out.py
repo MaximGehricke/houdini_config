@@ -4,7 +4,29 @@
 
 import hou
 
-def main(**kwargs):
+def nullForOut():
+    for node in hou.selectedNodes():
+        parent_network = node.parent()
+        node_pos = node.position()
+        num_outputs = len(node.outputConnectors())
+
+        # This 'with' block groups all actions into a single undo step
+        with hou.undos.group("Create Output Nulls"):
+            
+            for i in range(num_outputs):
+                null_node = parent_network.createNode("null")
+
+                # Set its input to the i-th output of our source node
+                null_node.setInput(0, node, i)
+                name = f"OUT_{i+1}"
+                null_node.setName(name, unique_name=True)
+                null_node.setColor(hou.Color((0.8, 0.4, 0.2))) # A nice orange color
+
+                # Place it below the source node, staggering horizontally for multiple outputs
+                null_node.setPosition(node_pos + hou.Vector2(i * 2, -1.5))
+
+
+def createOut():
     network = hou.ui.curDesktop().paneTabUnderCursor()
     networkpath = network.pwd().path()
     pos = network.cursorPosition()
@@ -41,6 +63,18 @@ def main(**kwargs):
     if lastNode!="noNodeSelected29834787320~###":
         out.setInput(0,lastNode)
         out.moveToGoodPosition()
+
+
+def main(**kwargs):
+    #creates output node "OUT_name" or replaces output node with a Null
+    if kwargs['ctrlclick']:
+        nullForOut()
+        return
+    if kwargs['shiftclick']:
+        nullForOut()
+        return
+    else:
+        createOut()
 
 
 if __name__ == "__main__":

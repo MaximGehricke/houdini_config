@@ -6,6 +6,7 @@ import hou
 
 def nullForOut():
     for node in hou.selectedNodes():
+        outs = node.outputLabels()
         parent_network = node.parent()
         node_pos = node.position()
         num_outputs = len(node.outputConnectors())
@@ -19,6 +20,9 @@ def nullForOut():
                 # Set its input to the i-th output of our source node
                 null_node.setInput(0, node, i)
                 name = f"OUT_{i+1}"
+                if "utpu" not in outs[i]:
+                    name = f"OUT_{outs[i]}".replace(" ","_")
+                print(name)
                 null_node.setName(name, unique_name=True)
                 null_node.setColor(hou.Color((0.8, 0.4, 0.2))) # A nice orange color
 

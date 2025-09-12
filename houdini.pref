@@ -16,3 +16,4 @@ notify.helptip.location := 1;
 pl.showAll.val := 1;
 pl.showHidden.val := 1;
 undomemlimit.val := 1024000;
+keepfloatwindowsontop.val := 1;

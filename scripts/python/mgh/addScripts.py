@@ -54,7 +54,7 @@ def main(legacy = 0,**kwargs):
             # Create a new tool
             tool = hou.shelves.newTool(
                 name=tool_name.replace(" ","").replace("#","").replace("\n",""),
-                label=tool_name,
+                label=tool_name.replace(" ","").replace("#","").replace("\n",""),
                 script=code,
                 icon= icon.replace(" ","").replace("#","").replace("\n","").replace("icon","").replace("=","")
             )

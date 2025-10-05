@@ -4,7 +4,6 @@
 
 import hou
 
-
 def main(**kwargs):
     # Define the names of your two desktops
     desk_primary = "mgh"

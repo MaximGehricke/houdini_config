@@ -1,24 +1,59 @@
-#latestWorkfile
+#latestWorkfile2.0
 #loads the latest workfile from a selection. Meant to be customized manually for a show.
 #icon = SOP_file
 
+datafileName = "latestWorkfile.csv"
+
 import hou, os
+import csv
 
-##########################################################
-#ADD YOUR WORKFILES HERE:
+def getOptions():
+        #returns a dictionary of names and paths from a csv file
+        parent_dir = os.path.dirname(os.path.abspath(__file__))
+        datapath = parent_dir.split("python")[0]+"data/"+datafileName
 
-#add it to option
-options = ("copy current .hip path","f")
-#...and create a variable of the same name containing the workfile path
+        choices = {}
+        with open(datapath, newline='') as csvfile:
+                reader = csv.DictReader(csvfile,fieldnames=["n","p"])
+                try:
+                        for row in reader:
+                            key = row['n']
+                            value = row['p']                
+                            choices[key]=value
+                except KeyError:
+                        print("end of file")
 
-filename = """/path/to/file/filename"""
 
-##########################################################
+        return choices
+
+
+def addCurrentFileToCsv():
+
+    houfile = hou.hipFile.path()
+    input = hou.ui.readInput("Provide a shortcut for loading this files latest:",buttons=('Accept','Cancel'),default_choice = 1, close_choice=2)
+    if not input or input[0]==2:
+        print("no input, exiting")
+        sys.exit(0)
+    else:
+        houname = input
+    
+    parent_dir = os.path.dirname(os.path.abspath(__file__))
+    datapath = parent_dir.split("python")[0]+"data/"+datafileName
+    #choices = {}
+    with open(datapath, "a", newline='', encoding="utf-8") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([str(houname[1]), str(houfile)])
 
 
 def main(**kwargs):
+    choices = getOptions() #this is a dict like this:       { "TST" : "job/test/test/test.hip" [...] }
+
+    menu = ["copy current .hip path","add current file"]
+    menu += list(choices.keys())
+
+    
     #choose workfile:
-    choice = hou.ui.selectFromList(options,exclusive=True)
+    choice = hou.ui.selectFromList(menu,exclusive=True)
     if not choice:
         exit()
 
@@ -27,21 +62,26 @@ def main(**kwargs):
         hou.ui.copyTextToClipboard(hou.hipFile.path())
         exit()
 
+    if choice[0]==1:
+        addCurrentFileToCsv()
+        exit()
 
     try:
-        choice = int(choice[0])
+        workfile = str(choices[menu[choice[0]]])
     except:
         print("latestWorkfile -- improper selection!")
         exit()
-    workfile = (eval(str(options[choice])))
+    
 
 
     #load the latest workfile:
-    file = workfile.split("/")[-1]
-    path = workfile.replace(file,"")
-
-    orig_version = file.split(".hip")[0].split("_")[-1]
-    basename = file.split(orig_version)[0]
+    workfile = workfile.replace('"',"").replace(" ","")
+    houfile = workfile.split("/")[-1]
+    path = workfile.replace(houfile,"")
+    
+    print(houfile)
+    orig_version = houfile.split(".hip")[0].split("_")[-1]
+    basename = houfile.split(orig_version)[0]
     filesInDir = [f for f in os.listdir(path) if os.path.isfile(path + f)]
 
     latest = 1
@@ -55,9 +95,9 @@ def main(**kwargs):
 
     print("latest: ",latest)
     version = "v"+str(latest).zfill(3)
-    file = file.replace(orig_version,version)
+    houfile = houfile.replace(orig_version,version)
 
-    fileToLoad = path+file
+    fileToLoad = path+houfile
     print(fileToLoad)
     hou.setUpdateMode(hou.updateMode.Manual)
     hou.hipFile.load(fileToLoad,suppress_save_prompt=True)

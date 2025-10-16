@@ -158,6 +158,21 @@ def main(**kwargs):
     minSpeed = '''if(length(v@v)<chf("minSpeed"))removepoint(0,@ptnum);'''
     
     masklerp = '''v@P=lerp(v@P,v@opinput1_P,@mask*chf("lerp"));'''
+
+    groupByBbox = '''// group by bbox
+    
+    vector min = set(0,0,0);
+    vector max = set(0,0,0);
+    getbbox(geoself(), min, max);
+    
+    int dir = chi("direction");
+    float pos = 0;
+    if(dir==0) pos = fit(v@P.x,min.x, max.x,0,1);
+    if(dir==1) pos = fit(v@P.y,min.y, max.y,0,1);
+    if(dir==2) pos = fit(v@P.z,min.z, max.z,0,1);
+    
+    if(chramp("clip",pos)<0.5) @group_`chs("groupname")`=1;
+    '''
     
     ##########################################################
     

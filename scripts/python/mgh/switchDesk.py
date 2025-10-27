@@ -5,6 +5,11 @@
 import hou
 
 def main(**kwargs):
+
+    if not kwargs['ctrlclick']:
+        print("pls control click this tool to activate")
+        return
+    
     # Define the names of your two desktops
     desk_primary = "mgh"
     desk_secondary = "solaris_mgh"

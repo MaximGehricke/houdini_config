@@ -1,6 +1,7 @@
 #mat
 #quickly create a grey arnold shader
- 
+#icon = "SOP_material"
+
 import hou
 
 def isArnoldInstalled():
@@ -58,13 +59,10 @@ def main(**kwargs):
             mat.setSelected(1)
             mat.setDisplayFlag(1)
             mat.setRenderFlag(1)
-        
 
 
+if __name__ == "__main__":
+     main()
 
-    
-    
-        
-
-        
-main()
+if __name__ == "builtins":
+     main()

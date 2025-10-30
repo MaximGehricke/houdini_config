@@ -30,6 +30,7 @@ def createFont():
     #align
     trf = node.createNode("xform","align")
     trf.parm("tx").setExpression("-bbox(0,D_XSIZE)/2", hou.exprLanguage.Hscript)
+    trf.parm("ty").setExpression("-bbox(0,D_YSIZE)/2", hou.exprLanguage.Hscript)
     trf.setInput(0, font)
     trf.setPosition((parent_pos[0], parent_pos[1] - 1))
     

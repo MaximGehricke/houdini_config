@@ -26,6 +26,7 @@ def createFont():
     font = node.createNode("font")
     parent_pos = font.position()
     
+    
     #align
     trf = node.createNode("xform","align")
     trf.parm("tx").setExpression("-bbox(0,D_XSIZE)/2", hou.exprLanguage.Hscript)
@@ -33,10 +34,12 @@ def createFont():
     trf.setPosition((parent_pos[0], parent_pos[1] - 1))
     
     #material
+    matnet = node.createNode("matnet","SHR")
     mat = node.createNode("material", "SHD_white")
-    mat.parm("shop_materialpath1").set("/shop/white")
+    mat.parm("shop_materialpath1").set("../SHR/white")
     mat.setInput(0, trf)
     mat.setPosition((parent_pos[0], parent_pos[1] - 2))
+    matnet.setPosition((mat.position()[0]-3, mat.position()[1]))
     
     #output
     out = node.createNode('output')
@@ -51,6 +54,7 @@ def createFont():
     font.setSelected(1)
     
     return font
+    
     
 def placeFont(font,cam,scale = 2):
     font = font.parent()
@@ -69,11 +73,12 @@ def placeFont(font,cam,scale = 2):
     font.setPosition((parent_pos[0], parent_pos[1] - 1))
     font.setName(str(cam.name())+"_font", unique_name=True)
     
-def createWhiteMaterial():
+def createWhiteMaterial(font):
     #creates a flat white arnold or mantra shader in /shop/ (if shader named "white" doesn't exist yet)
-    if not hou.node("/shop/white"):
+    matnet = hou.node(font.parent().path()+"/SHR")
+    if not hou.node(font.path()+"/SHR"):
         if hou.nodeType("Driver/arnold") is not None:
-            vopnet = hou.node("/shop").createNode("arnold_vopnet","white")
+            vopnet = matnet.createNode("arnold_materialbuilder","white")
             flat = vopnet.createNode("arnold::flat", "flat")
             out = hou.node(str(vopnet.path())+"/OUT_material")
             
@@ -83,11 +88,59 @@ def createWhiteMaterial():
         else:
             vopnet = hou.node("/shop").createNode("v_constant","white")
 
+
+def main(**kwargs):def placeFont(font,cam,scale = 2):
+    font = font.parent()
+    font.setInput(0, cam)
+    
+    nearClip = cam.parm("near").eval()
+    resx = cam.parm("resx").eval()
+    resy = cam.parm("resy").eval()
+    focal = cam.parm("focal").eval()
+    aspect = cam.parm("aspect").eval()
+        
+    font.parmTuple("t").set(((nearClip/2)/(focal/50),(-nearClip/2)*resy/resx/(focal/50)/aspect, -nearClip*1.1))
+    font.parmTuple("s").set((aspect,1,1))
+    font.parm("scale").set((nearClip/2*scale/focal)*1.7/(resx/resy))
+    parent_pos = cam.position()
+    font.setPosition((parent_pos[0], parent_pos[1] - 1))
+    font.setName(str(cam.name())+"_font", unique_name=True)
+    
+def createWhiteMaterial(font):
+    #creates a flat white arnold or mantra shader in /shop/ (if shader named "white" doesn't exist yet)
+    matnet = hou.node(font.parent().path()+"/SHR")
+    if not hou.node(font.path()+"/SHR"):
+        if hou.nodeType("Driver/arnold") is not None:
+            vopnet = matnet.createNode("arnold_materialbuilder","white")
+            flat = vopnet.createNode("arnold::flat", "flat")
+            out = hou.node(str(vopnet.path())+"/OUT_material")
+            
+            out.setInput(0, flat)
+            parent_pos = out.position()
+            flat.setPosition((parent_pos[0]-3, parent_pos[1]))
+        else:
+            vopnet = hou.node("/shop").createNode("v_constant","white")
+
+
 def main(**kwargs):
     cam = getCurCam()
     font = createFont()
     placeFont(font,cam)
-    createWhiteMaterial()
+    createWhiteMaterial(font)
+    #hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor).setCurrentNode(font)
+
+
+
+
+if __name__ == "__main__":
+     main()
+
+if __name__ == "builtins":
+     main()
+    cam = getCurCam()
+    font = createFont()
+    placeFont(font,cam)
+    createWhiteMaterial(font)
     #hou.ui.paneTabOfType(hou.paneTabType.NetworkEditor).setCurrentNode(font)
 
 

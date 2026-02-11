@@ -16,7 +16,7 @@ def findLowestNode(nodesToRunOver = ""):
         nodesToRunOver = hou.selectedNodes()
     lastNode = None
     
-    lowestPos = 10000000000;
+    lowestPos = 10000000000
     for node in nodesToRunOver:
         position = node.position()[1]
         if position<lowestPos:

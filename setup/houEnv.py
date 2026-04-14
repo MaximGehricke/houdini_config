@@ -3,6 +3,7 @@
 import time, os, sys, re
 
 locations = ["C:/Users/Maxim/Documents/","/net/homes/mgehrick/"]
+thisPath = os.path.abspath(__file__).replace("\\","/").replace("/setup/houEnv.py","")
 
 def winOrLinux():
 
@@ -105,10 +106,7 @@ def main():
     print("\n")
     time.sleep(0.5)
     print("\n")
-    if system == "windows":
-        bp = readBoilerplate().replace("# windows path: ","")
-    else:
-        bp = readBoilerplate().replace("# linux path: ","")
+    bp = readBoilerplate().replace("addPathToConfigFolderHere",thisPath)
     time.sleep(0.5)
     print("\n")
     time.sleep(0.5)

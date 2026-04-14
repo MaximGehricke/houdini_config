@@ -3,8 +3,7 @@
 # ===============================================================
 
 # 1. Define the root of our Git repository. 
-# windows path: HOUDINI_REPO = "Z:/houdini_config/"
-# linux path: HOUDINI_REPO = "/net/homes/mgehrick/houdini_config"
+HOUDINI_REPO = "addPathToConfigFolderHere"
 
 # 2. Add our repo to Houdini's search path.
 #    The '&' tells Houdini to also include the default paths.

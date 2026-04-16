@@ -1,3 +1,7 @@
+#replace
+#search and replace in parameters
+#icon = opdef:/labs::Sop/attribute_value_replace?IconSVG
+
 import hou
 
 # Initialize session keys if they don't exist

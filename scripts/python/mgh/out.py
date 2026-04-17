@@ -1,6 +1,7 @@
 #OUT
 #creates an output node, sets name, shape, color. toggles to null if it already exists
 #icon = SOP_output
+#hotkey = O
 
 import hou
 

@@ -100,7 +100,7 @@ def main(**kwargs):
     except ModuleNotFoundError:
         import os
         parent_dir = os.path.dirname(os.path.dirname(__file__))
-        path_hint = os.path.join(parent_dir, "scripts", "python", "mghui", "radialMenu.py")
+        path_hint = os.path.join(parent_dir, "mghui", "radialMenu.py")
         hou.ui.displayMessage(f"Radial menu is not available. Make sure it's installed under: {path_hint}")
         exit()
 

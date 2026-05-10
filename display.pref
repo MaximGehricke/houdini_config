@@ -21,7 +21,7 @@
         shadowmapsize ( 2048 )
         sceneantialias ( 2 )
         textureAnisotropy ( 4 )
-        viewGamma ( 1 )
+        viewGamma ( 2.2 )
         ambOcclusionLevel ( 3 )
         useRayTrace ( 0 )
         useDenoise ( 0 )
@@ -369,7 +369,7 @@
         drawprofiles ( 0 )
         drawprofnums ( 0 )
         drawfaded ( 1 )
-        drawghosted ( 1 )
+        drawghosted ( 0 )
         uvfillbackfaces ( 0 )
         uvfilloverlap ( 0 )
         linktoolbar ( 0 )
@@ -392,7 +392,7 @@
         primnmlsmode ( on )
         boundarymode ( none )
         uvboundarymode ( uv )
-        shadingmode ( wire )
+        shadingmode ( shade )
     }
     ROTOSCOPE
     persp
@@ -666,11 +666,11 @@
     fgImageEnable ( 1 )
     fgImageDepth ( 1 )
 }
-near ( 0.00374147 )
-far ( 37414.7 )
+near ( 0.001 )
+far ( 7.04141e+07 )
 fov ( 45 )
 limitnear ( 0 1 )
-adjustlimits ( 3 )
+adjustlimits ( 0 )
 orthogrid_spacing ( 0.2 0.2 )
 orthogrid_ruler ( 5 5 )
 orthogrid_rulertype ( main_axes )

@@ -87,6 +87,8 @@ def createViz():
         vizzer.setName(f"VIZ_{lastName}", unique_name=True)
     
     vizzer.setSelected(True, clear_all_selected=True)
+    solidTemplate()
+    vizzer.setTemplateFlag(True)
 
 
 def toggle_specific(node):

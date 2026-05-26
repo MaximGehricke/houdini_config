@@ -38,7 +38,7 @@ def createOut():
 
     #find lowest selected node:
     selectedNodes = hou.selectedNodes()
-    lastNode = "noNodeSelected29834787320~###"
+    lastNode = None
 
     lowestPos = 10000000000;
     for node in selectedNodes:
@@ -64,7 +64,7 @@ def createOut():
     out.setName(name,1)
     out.setSelected(1,1)
 
-    if lastNode!="noNodeSelected29834787320~###":
+    if lastNode:
         for outputNode in lastNode.outputs():
             outputNode.setInput(0,out)
         out.setInput(0,lastNode)

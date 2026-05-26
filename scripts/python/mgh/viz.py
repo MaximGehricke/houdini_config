@@ -80,6 +80,8 @@ def createViz():
     vizzer.setName("VIZ_01", unique_name=True)
     
     if lastNode:
+        for outputNode in lastNode.outputs():
+            outputNode.setInput(0,out)
         vizzer.setInput(0, lastNode)
         vizzer.moveToGoodPosition()
         lastName = clean_label(lastNode.name())

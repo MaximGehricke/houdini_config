@@ -30,7 +30,6 @@ def nullForOut():
                 # Place it below the source node, staggering horizontally for multiple outputs
                 null_node.setPosition(node_pos + hou.Vector2(i * 2, -1.5))
 
-
 def createOut():
     network = hou.ui.curDesktop().paneTabUnderCursor()
     networkpath = network.pwd().path()
@@ -66,7 +65,9 @@ def createOut():
     out.setSelected(1,1)
 
     if lastNode!="noNodeSelected29834787320~###":
-        out.setInput(0,lastNode)
+        out.setInput(0,lastNode)#
+        for outputNode in lastNode.outputs():
+            outputNode.setInput(0,out)
         out.moveToGoodPosition()
 
 

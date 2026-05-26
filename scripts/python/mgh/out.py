@@ -65,11 +65,10 @@ def createOut():
     out.setSelected(1,1)
 
     if lastNode!="noNodeSelected29834787320~###":
-        out.setInput(0,lastNode)#
         for outputNode in lastNode.outputs():
             outputNode.setInput(0,out)
+        out.setInput(0,lastNode)
         out.moveToGoodPosition()
-
 
 def main(**kwargs):
     #creates output node "OUT_name" or replaces output node with a Null

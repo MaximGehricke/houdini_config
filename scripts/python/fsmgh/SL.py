@@ -5,7 +5,7 @@
 
 import hou
 
-def main():
+def main(**kwargs):
     node = hou.node('/obj/sl_sequence_manager1')
     desktop = hou.ui.curDesktop()
     if node is not None:

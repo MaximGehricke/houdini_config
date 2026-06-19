@@ -1,0 +1,34 @@
+#SL_setCaches
+#set caches with "shotname" placeholder names to correct name and to write into correct shotname
+
+import hou
+
+shot = hou.parm('/obj/sl_sequence_manager1/SQL_Current_Shot').eval()
+
+for node in hou.selectedNodes():
+
+    # Rename node
+    new_name = node.name()
+
+    if "shotname" in new_name:
+        new_name = new_name.replace("shotname", shot)
+
+    new_name = (
+        new_name
+        .replace("__1", "")
+        .replace("__2", "")
+        .replace("__", "")
+    )
+
+    if new_name != node.name():
+        node.setName(new_name, unique_name=True)
+    
+
+# Set parameters
+    parm_seq = node.parm("cmp_seq_override")
+    if parm_seq:
+        parm_seq.set(shot.split("_")[0])
+
+    parm_shot = node.parm("cmp_shot_override")
+    if parm_shot:
+        parm_shot.set(shot)

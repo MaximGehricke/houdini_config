@@ -1,0 +1,10 @@
+#setCameraInVP
+#to be added to the SL manager scripts, automatically views correct camera on "Set Shot"
+
+import hou
+
+viewer = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)
+viewport = viewer.curViewport()
+
+cam = hou.node("/obj/"+shot_name+"_render")
+viewport.setCamera(cam)

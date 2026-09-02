@@ -1,0 +1,198 @@
+#fetchVersionControl
+#vibe coded garbage, but this builds a version control from selected fetches that can push version numbers to all found caches
+#icon = SOP_cache
+
+import re
+import hou
+
+# ==============================================================================
+# CONFIGURATION CONSTANTS
+# ==============================================================================
+READ_PARM_NAME = "cmp_read_version"
+WRITE_PARM_NAME = "cmp_version"
+
+# Fallbacks if a target node uses different standard parameter names
+FALLBACK_READ_PARMS = ["readversion", "read_version", "v_read", "rversion", "load_version"]
+FALLBACK_WRITE_PARMS = ["writeversion", "write_version", "version", "v", "ver", "wversion"]
+
+
+def resolve_fetch_to_absolute_node(node):
+    """
+    Takes a hou.Node (Fetch or standard node).
+    If it's a Fetch node, reads the 'source' parameter, resolves relative/absolute 
+    paths, and returns the target hou.Node object.
+    """
+    if not node:
+        return None
+
+    if node.type().name() == "fetch":
+        source_parm = node.parm("source")
+        if source_parm:
+            raw_path = source_parm.eval()
+            if raw_path:
+                # node.node() natively resolves both relative ('../../obj/geo1') 
+                # and absolute ('/obj/geo1') paths from the Fetch node's context
+                resolved_node = node.node(raw_path)
+                if resolved_node:
+                    return resolve_fetch_to_absolute_node(resolved_node)
+                else:
+                    print(f"[Version Control Error] Fetch '{node.path()}' target '{raw_path}' not found.")
+                    return None
+            else:
+                print(f"[Version Control Error] Fetch '{node.path()}' has an empty 'source' parameter.")
+                return None
+        else:
+            print(f"[Version Control Error] Node '{node.path()}' lacks 'source' parameter.")
+            return None
+
+    return node
+
+
+def extract_int(val):
+    if isinstance(val, (int, float)):
+        return int(val)
+    if isinstance(val, str):
+        match = re.search(r'\d+', val)
+        if match:
+            return int(match.group())
+    return 1
+
+
+def find_version_parms(target_node):
+    """Finds configured read/write version parameter names on the target node."""
+    read_candidates = [READ_PARM_NAME] + FALLBACK_READ_PARMS
+    write_candidates = [WRITE_PARM_NAME] + FALLBACK_WRITE_PARMS
+
+    found_read = None
+    found_write = None
+
+    for name in read_candidates:
+        if target_node.parm(name) is not None:
+            found_read = name
+            break
+
+    for name in write_candidates:
+        if target_node.parm(name) is not None:
+            found_write = name
+            break
+
+    return {
+        "read": found_read or READ_PARM_NAME,
+        "write": found_write or WRITE_PARM_NAME
+    }
+
+
+def build_version_controller():
+    selected_nodes = hou.selectedNodes()
+    if not selected_nodes:
+        hou.ui.displayMessage("Select one or more ROP or Fetch nodes in /out.", severity=hou.severityType.Warning)
+        return
+
+    # 1. Clean slate: recreate /out/VERSION_CONTROL
+    out_context = hou.node("/out")
+    ctrl_node = out_context.node("VERSION_CONTROL")
+    if ctrl_node:
+        ctrl_node.destroy()
+
+    ctrl_node = out_context.createNode("null", "VERSION_CONTROL")
+    ctrl_node.setColor(hou.Color((0.2, 0.65, 0.4)))
+
+    ptg = ctrl_node.parmTemplateGroup()
+    ctrl_folder = hou.FolderParmTemplate("version_control_tab", "Version Control")
+    mapping_lines = []
+
+    print("\n" + "="*60)
+    print("[Version Control Setup] Processing selected nodes...")
+    print("="*60)
+
+    # 2. Resolve absolute paths and create parameters
+    for idx, sel_node in enumerate(selected_nodes):
+        target_node = resolve_fetch_to_absolute_node(sel_node)
+
+        if not target_node:
+            print(f"Skipping '{sel_node.path()}' - Target node could not be resolved.")
+            continue
+
+        parms = find_version_parms(target_node)
+        read_parm = parms["read"]
+        write_parm = parms["write"]
+
+        has_read = target_node.parm(read_parm) is not None
+        has_write = target_node.parm(write_parm) is not None
+
+        print(f"\nSelection [{idx+1}]: {sel_node.path()}")
+        print(f" -> Absolute Target Node: {target_node.path()} (Type: {target_node.type().name()})")
+        print(f" -> Target Read Parm : '{read_parm}' (Found: {has_read})")
+        print(f" -> Target Write Parm: '{write_parm}' (Found: {has_write})")
+
+        read_val = extract_int(target_node.parm(read_parm).eval()) if has_read else 1
+        write_val = extract_int(target_node.parm(write_parm).eval()) if has_write else 1
+
+        safe_prefix = re.sub(r'[^a-zA-Z0-9_]', '_', sel_node.name()) + f"_{idx}"
+        read_parm_name = f"{safe_prefix}_read"
+        write_parm_name = f"{safe_prefix}_write"
+
+        # Create control parameters on Null
+        ctrl_folder.addParmTemplate(
+            hou.IntParmTemplate(read_parm_name, f"{sel_node.name()} [Read]", 1, default_value=(read_val,))
+        )
+        ctrl_folder.addParmTemplate(
+            hou.IntParmTemplate(write_parm_name, f"{sel_node.name()} [Write]", 1, default_value=(write_val,))
+        )
+        ctrl_folder.addParmTemplate(hou.SeparatorParmTemplate(f"sep_{safe_prefix}"))
+
+        # Map spare parameter directly to target node absolute path
+        mapping_lines.append(f"    '{read_parm_name}': ('{target_node.path()}', '{read_parm}'),")
+        mapping_lines.append(f"    '{write_parm_name}': ('{target_node.path()}', '{write_parm}'),")
+
+    if not mapping_lines:
+        hou.ui.displayMessage("Failed to resolve any target nodes from selection.", severity=hou.severityType.Error)
+        return
+
+    # 3. Hardcode target mapping into push button script
+    push_callback = """import hou
+
+ctrl = kwargs['node']
+targets = {
+""" + "\n".join(mapping_lines) + """
+}
+
+count = 0
+for spare_name, (target_path, target_parm) in targets.items():
+    spare_p = ctrl.parm(spare_name)
+    if not spare_p:
+        continue
+
+    val = spare_p.eval()
+    target_node = hou.node(target_path)
+
+    if target_node:
+        p = target_node.parm(target_parm)
+        if p:
+            p.set(val)
+            count += 1
+            print(f"[Version Control] Pushed {val} -> {target_path}/{target_parm}")
+        else:
+            print(f"[Version Control Error] Parameter '{target_parm}' not found on {target_path}")
+    else:
+        print(f"[Version Control Error] Node missing at absolute path '{target_path}'")
+
+hou.ui.displayMessage(f"Pushed values to {count} target parameter(s).", severity=hou.severityType.ImportantMessage)
+"""
+
+    button_pt = hou.ButtonParmTemplate("push_versions", "Push Versions to Nodes")
+    button_pt.setScriptCallback(push_callback)
+    button_pt.setScriptCallbackLanguage(hou.scriptLanguage.Python)
+
+    ctrl_folder.addParmTemplate(button_pt)
+    ptg.append(ctrl_folder)
+    ctrl_node.setParmTemplateGroup(ptg)
+
+    ctrl_node.setSelected(True, clear_all_selected=True)
+    print("\n" + "="*60)
+    print(f"[Version Control] Successfully created /out/VERSION_CONTROL.")
+    print("="*60 + "\n")
+
+
+# Execute
+build_version_controller()

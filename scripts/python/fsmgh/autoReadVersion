@@ -1,0 +1,8 @@
+# paste this code into a sopcache pre-submission script field. Leave the field as string, not python!
+# On submission, the read version will be set to same as write version
+
+import hou
+
+node = hou.node(".")
+cmp_version = node.parm("cmp_version").eval()
+node.parm("cmp_read_version").set(cmp_version)
